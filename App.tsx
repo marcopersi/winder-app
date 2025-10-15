@@ -8,6 +8,7 @@ import { Wine, WineFilter } from './src/types';
 import { userPreferenceService } from './src/services/userPreferenceService';
 import { useSupabaseAuth } from './src/hooks/useSupabaseAuth';
 import { createDefaultFilter, convertToDBFilter } from './src/utils/filterUtils';
+import { referenceDataService } from './src/services/referenceDataService';
 
 // Sample initial filter - in production this would come from user preferences
 const initialFilter: WineFilter = createDefaultFilter();
@@ -70,6 +71,19 @@ function App(): React.JSX.Element {
     if (currentFilter.minPrice > 0 || currentFilter.maxPrice < 1000) count++;
     return count;
   };
+
+  // Initialize reference data service on app start
+  useEffect(() => {
+    const initializeReferenceData = async () => {
+      try {
+        await referenceDataService.initialize();
+      } catch (error) {
+        console.error('Failed to initialize reference data:', error);
+      }
+    };
+
+    initializeReferenceData();
+  }, []);
 
   // Fetch wines from Supabase - works for both logged-in users and guests
   useEffect(() => {

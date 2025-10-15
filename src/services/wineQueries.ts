@@ -10,7 +10,8 @@
  */
 
 import { supabase } from '../lib/supabase';
-import { Wine, DatabaseWineFilter } from '../types';
+import { WineFilter } from '../types';
+import { referenceDataService } from './referenceDataService';
 
 const SUPPORTED_LANGUAGES = ['de', 'en', 'fr', 'it'] as const;
 type SupportedLanguage = (typeof SUPPORTED_LANGUAGES)[number];
@@ -93,14 +94,26 @@ export const fetchWines = async (
         winesQuery = winesQuery.in('region_name_default', filters.regions);
       }
 
-      // Wine type filter
+      // Wine type filter - Convert translated names to canonical names
       if (filters.wineType && filters.wineType.length > 0) {
-        winesQuery = winesQuery.in('wine_type', filters.wineType);
+        const wineTypeNames = filters.wineType
+          .map(name => referenceDataService.getWineTypeName(name))
+          .filter((n): n is string => n !== null);
+        
+        if (wineTypeNames.length > 0) {
+          winesQuery = winesQuery.in('wine_type', wineTypeNames);
+        }
       }
 
-      // Wine color filter
+      // Wine color filter - Convert translated names to canonical names
       if (filters.color && filters.color.length > 0) {
-        winesQuery = winesQuery.in('wine_color', filters.color);
+        const colorNames = filters.color
+          .map(name => referenceDataService.getWineColorName(name))
+          .filter((n): n is string => n !== null);
+        
+        if (colorNames.length > 0) {
+          winesQuery = winesQuery.in('wine_color', colorNames);
+        }
       }
 
       // Sweetness filter

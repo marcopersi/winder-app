@@ -39,8 +39,6 @@ const GrapeFilter: React.FC<GrapeFilterProps> = ({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Grape Varieties ({options.length})</Text>
-      
       {/* Search Input */}
       {options.length > 10 && (
         <View style={styles.searchContainer}>
@@ -74,12 +72,6 @@ const GrapeFilter: React.FC<GrapeFilterProps> = ({
 const styles = StyleSheet.create({
   container: {
     gap: 16,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 12,
-    color: '#333',
   },
   searchContainer: {
     marginBottom: 8,

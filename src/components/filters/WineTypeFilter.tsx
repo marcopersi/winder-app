@@ -15,7 +15,6 @@ const WineTypeFilter: React.FC<WineTypeFilterProps> = ({
 }) => {
   return (
     <View>
-      <Text style={styles.title}>Wine Types ({options.length})</Text>
       {options.length > 0 ? (
         <FilterOptionButtons
           options={options}
@@ -33,12 +32,6 @@ const WineTypeFilter: React.FC<WineTypeFilterProps> = ({
 };
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 12,
-    color: '#333',
-  },
   loadingContainer: {
     padding: 16,
     alignItems: 'center',

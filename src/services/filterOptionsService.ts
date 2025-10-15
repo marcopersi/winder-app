@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import { logger } from '../utils/logger';
 
 /**
  * Filter Options Service
@@ -51,7 +52,7 @@ const normalizeLanguageCode = (languageCode: string = 'de'): string => {
  */
 // Fetch grape options from grapes reference table (wie Web App)
 export const fetchGrapeOptions = async (): Promise<string[]> => {
-  console.log('🍇 [FilterOptions] Fetching grape options...');
+  logger.filterOptions.debug('Fetching grape options...');
   
   const { data, error } = await supabase
     .from('grapes')
@@ -59,7 +60,7 @@ export const fetchGrapeOptions = async (): Promise<string[]> => {
     .order('name', { ascending: true });
   
   if (error) {
-    console.error('❌ [FilterOptions] Error fetching grape options:', error);
+    logger.filterOptions.error('Error fetching grape options:', error);
     throw error;
   }
   
@@ -71,7 +72,7 @@ export const fetchGrapeOptions = async (): Promise<string[]> => {
     .map(item => item.name)
     .filter(Boolean);
   
-  console.log(`✅ [FilterOptions] Loaded ${grapeOptions.length} grape options`);
+  logger.filterOptions.info(`Loaded ${grapeOptions.length} grape options`);
   return grapeOptions;
 };
 
@@ -210,7 +211,7 @@ export const fetchWineTypeOptions = async (languageCode: string = 'de'): Promise
   const cached = getCacheValue(cacheKey);
   if (cached) return cached;
 
-  console.log('🍷 [FilterOptions] Fetching wine type options from wine_types_translations');
+  logger.filterOptions.debug('Fetching wine type options...');
 
   const { data: wineTypes, error } = await supabase
     .from('wine_types_translations')
@@ -219,7 +220,7 @@ export const fetchWineTypeOptions = async (languageCode: string = 'de'): Promise
     .order('translated_name', { ascending: true });
 
   if (error) {
-    console.error('❌ [FilterOptions] Error fetching wine type options:', error);
+    logger.filterOptions.error('Error fetching wine type options:', error);
     throw error;
   }
 
@@ -227,13 +228,14 @@ export const fetchWineTypeOptions = async (languageCode: string = 'de'): Promise
     throw new Error(`No wine type options found for language ${normalizedLanguage}`);
   }
 
+  // Return translated names (e.g., 'Stillwein', 'Schaumwein' for DE) - Backend will convert!
   const uniqueValues = [...new Set(wineTypes.map(wt => wt.translated_name).filter(value => value))];
   
   if (uniqueValues.length === 0) {
     throw new Error(`No wine type options found for language ${normalizedLanguage}`);
   }
   
-  console.log(`✅ [FilterOptions] Fetched ${uniqueValues.length} wine type options from database`);
+  logger.filterOptions.info(`Loaded ${uniqueValues.length} wine type options`);
   setCacheValue(cacheKey, uniqueValues);
   return uniqueValues;
 };
@@ -263,6 +265,7 @@ export const fetchColorOptions = async (languageCode: string = 'de'): Promise<st
       throw error;
     }
 
+    // Return translated names (e.g., 'Rot', 'Weiss' for DE) - Backend will convert!
     const colorValues = colors?.map((color) => color.translated_name).filter((value): value is string => Boolean(value)) ?? [];
     const uniqueColors = [...new Set(colorValues)];
     
@@ -506,7 +509,7 @@ export const fetchPriceOptions = async (languageCode: string = 'de'): Promise<st
  * NO FALLBACKS - throws immediately on any error
  */
 export const getAllFilterOptions = async (languageCode: string = 'de'): Promise<Record<string, string[]>> => {
-  console.log(`🔍 [FilterOptions] Loading all filter options for language: ${languageCode}`);
+  logger.filterOptions.debug(`Loading all filter options for language: ${languageCode}`);
   
   // TEMPORARILY use Promise.allSettled to see which fetches fail
   const results = await Promise.allSettled([
@@ -523,13 +526,14 @@ export const getAllFilterOptions = async (languageCode: string = 'de'): Promise<
   const filterNames = ['grape', 'wineType', 'color', 'sweetness', 'productionType', 'unit', 'alcohol', 'price'];
   
   // Log which filters succeeded and which failed
-  results.forEach((result, index) => {
+  for (let index = 0; index < results.length; index++) {
+    const result = results[index];
     if (result.status === 'fulfilled') {
-      console.log(`✅ [FilterOptions] ${filterNames[index]}: SUCCESS - ${result.value.length} items`);
+      logger.filterOptions.debug(`${filterNames[index]}: SUCCESS - ${result.value.length} items`);
     } else {
-      console.error(`❌ [FilterOptions] ${filterNames[index]}: FAILED - ${result.reason}`);
+      logger.filterOptions.error(`${filterNames[index]}: FAILED - ${result.reason}`);
     }
-  });
+  }
 
   const filterOptions = {
     grape: results[0].status === 'fulfilled' ? results[0].value : [],
@@ -542,7 +546,7 @@ export const getAllFilterOptions = async (languageCode: string = 'de'): Promise<
     price: results[7].status === 'fulfilled' ? results[7].value : []
   };
 
-  console.log(`📊 [FilterOptions] Final counts:`, {
+  logger.filterOptions.info(`Loaded filter options:`, {
     grape: filterOptions.grape.length,
     wineType: filterOptions.wineType.length,
     color: filterOptions.color.length,

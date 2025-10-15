@@ -3,7 +3,6 @@ import {
   Modal,
   ScrollView,
   StyleSheet,
-  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { WineFilter } from '../types';
@@ -22,8 +21,7 @@ import GrapeFilter from './filters/GrapeFilter';
 import CountryFilter from './filters/CountryFilter';
 import WineTypeFilter from './filters/WineTypeFilter';
 import CharacteristicFilter from './filters/CharacteristicFilter';
-
-
+import CollapsibleCard from './filters/CollapsibleCard';
 
 interface FilterMenuProps {
   isVisible: boolean;
@@ -65,8 +63,10 @@ const FilterMenu: React.FC<FilterMenuProps> = ({
       
       try {
         // Load dynamic options and countries in parallel
-        const dynamicOptions = await getAllFilterOptions('de');
-        const countries = await fetchCountryOptions('de');
+        const [dynamicOptions, countries] = await Promise.all([
+          getAllFilterOptions('de'),
+          fetchCountryOptions('de')
+        ]);
 
         // Extract country codes and create label mapping
         const countryCodes = countries
@@ -120,12 +120,7 @@ const FilterMenu: React.FC<FilterMenuProps> = ({
     onClose();
   };
 
-  const updateFilter = (key: keyof WineFilter, value: any) => {
-    setFilter(prev => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
+
 
 
 
@@ -163,75 +158,75 @@ const FilterMenu: React.FC<FilterMenuProps> = ({
           contentContainerStyle={{ padding: 16, paddingBottom: 120 }}
           showsVerticalScrollIndicator={true}
         >
-          {/* SIMPLIFIED - NO ACCORDION - Just render all filters directly */}
+          {/* NEW: COLLAPSIBLE CARD LAYOUT */}
           
           {/* Grape Filter */}
-          <View style={{ marginBottom: 20, backgroundColor: 'white', padding: 12, borderRadius: 8 }}>
+          <CollapsibleCard title={`Grapes (${filterOptions.grape.length})`} defaultExpanded={false}>
             <GrapeFilter
               options={filterOptions.grape}
               selectedOptions={filter.grape || []}
               onToggleOption={(value) => handleToggleOption('grape', value)}
             />
-          </View>
+          </CollapsibleCard>
           
           {/* Country Filter */}
-          <View style={{ marginBottom: 20, backgroundColor: 'white', padding: 12, borderRadius: 8 }}>
+          <CollapsibleCard title={`Countries (${(filterOptions.country || []).length})`} defaultExpanded={false}>
             <CountryFilter
               options={filterOptions.country || []}
               selectedOptions={filter.country || []}
               onToggleOption={(value) => handleToggleOption('country', value)}
               labelMap={countryLabels}
             />
-          </View>
+          </CollapsibleCard>
           
           {/* Wine Type Filter */}
-          <View style={{ marginBottom: 20, backgroundColor: 'white', padding: 12, borderRadius: 8 }}>
+          <CollapsibleCard title={`Wine Types (${(filterOptions.wineType || []).length})`} defaultExpanded={false}>
             <WineTypeFilter
               options={filterOptions.wineType || []}
               selectedOptions={filter.wineType || []}
               onToggleOption={(value) => handleToggleOption('wineType', value)}
             />
-          </View>
+          </CollapsibleCard>
           
           {/* Color Filter */}
-          <View style={{ marginBottom: 20, backgroundColor: 'white', padding: 12, borderRadius: 8 }}>
+          <CollapsibleCard title={`Colors (${(filterOptions.color || []).length})`} defaultExpanded={false}>
             <CharacteristicFilter
               type="color"
               options={filterOptions.color || []}
               selectedOptions={filter.color || []}
               onToggleOption={(value) => handleToggleOption('color', value)}
             />
-          </View>
+          </CollapsibleCard>
           
           {/* Sweetness Filter */}
-          <View style={{ marginBottom: 20, backgroundColor: 'white', padding: 12, borderRadius: 8 }}>
+          <CollapsibleCard title={`Sweetness (${(filterOptions.sweetness || []).length})`} defaultExpanded={false}>
             <CharacteristicFilter
               type="sweetness"
               options={filterOptions.sweetness || []}
               selectedOptions={filter.sweetness || []}
               onToggleOption={(value) => handleToggleOption('sweetness', value)}
             />
-          </View>
+          </CollapsibleCard>
           
           {/* Alcohol Filter */}
-          <View style={{ marginBottom: 20, backgroundColor: 'white', padding: 12, borderRadius: 8 }}>
+          <CollapsibleCard title={`Alcohol (${(filterOptions.alcohol || []).length})`} defaultExpanded={false}>
             <CharacteristicFilter
               type="alcohol"
               options={filterOptions.alcohol || []}
               selectedOptions={filter.alcohol || []}
               onToggleOption={(value) => handleToggleOption('alcohol', value)}
             />
-          </View>
+          </CollapsibleCard>
           
           {/* Price Filter */}
-          <View style={{ marginBottom: 20, backgroundColor: 'white', padding: 12, borderRadius: 8 }}>
+          <CollapsibleCard title={`Price (${(filterOptions.price || []).length})`} defaultExpanded={false}>
             <CharacteristicFilter
               type="price"
               options={filterOptions.price || []}
               selectedOptions={filter.price || []}
               onToggleOption={(value) => handleToggleOption('price', value)}
             />
-          </View>
+          </CollapsibleCard>
         </ScrollView>
 
         <FilterActions

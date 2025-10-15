@@ -16,13 +16,7 @@ const FilterOptionButtons: React.FC<FilterOptionButtonsProps> = ({
   category,
   labelMap,
 }) => {
-  // DEBUG: Log what we receive
-  console.log(`🔍 [FilterOptionButtons] Rendering for category "${category}":`, {
-    optionsReceived: options,
-    optionsCount: options?.length || 0,
-    selectedOptions: selectedOptions,
-    hasLabelMap: !!labelMap
-  });
+  // Removed verbose debug logging
 
   const getDisplayLabel = (option: string): string => {
     // Ensure option is a string
@@ -40,7 +34,6 @@ const FilterOptionButtons: React.FC<FilterOptionButtonsProps> = ({
   };
 
   const filteredOptions = options.filter(option => option != null && option !== '');
-  console.log(`🔍 [FilterOptionButtons] After filtering nulls, count: ${filteredOptions.length}`);
 
   return (
     <View style={styles.container}>

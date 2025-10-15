@@ -17,7 +17,6 @@ const CountryFilter: React.FC<CountryFilterProps> = ({
 }) => {
   return (
     <View>
-      <Text style={styles.title}>Countries ({options.length})</Text>
       {options.length > 0 ? (
         <FilterOptionButtons
           options={options}
@@ -36,12 +35,6 @@ const CountryFilter: React.FC<CountryFilterProps> = ({
 };
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 12,
-    color: '#333',
-  },
   loadingContainer: {
     padding: 16,
     alignItems: 'center',
