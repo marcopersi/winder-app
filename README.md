@@ -77,6 +77,122 @@ When you want to forcefully reload, for example to reset the state of your app, 
 
 You've successfully run and modified your React Native App. :partying_face:
 
+# Most Used Commands
+
+Here are the most frequently used commands for this React Native project:
+
+## Development Commands
+
+```sh
+# Start the Metro bundler
+npx react-native start
+
+# Run on iOS simulator
+cd /Users/marcopersi/development/WinderApp
+npx react-native run-ios
+
+#Option 2, a specific simulator
+cd /Users/marcopersi/development/WinderApp
+npx react-native run-ios --simulator="iPhone 16 Plus"
+
+# Run on Android emulator/device
+npx react-native run-android
+
+# Clean Metro cache (useful for debugging)
+npx react-native start --reset-cache
+
+# Clean and rebuild iOS project
+cd ios && xcodebuild clean && cd .. && npx react-native run-ios
+
+# Clean and rebuild Android project
+cd android && ./gradlew clean && cd .. && npx react-native run-android
+```
+
+## iOS Specific Commands
+
+```sh
+# Install CocoaPods dependencies (run after cloning or updating native deps)
+cd ios && pod install && cd ..
+
+# Or using bundle
+bundle exec pod install
+
+# Clean derived data (useful when Xcode builds fail)
+rm -rf ~/Library/Developer/Xcode/DerivedData/
+
+# Reset iOS simulator
+npx react-native run-ios --simulator="iPhone 15"
+```
+
+## Android Specific Commands
+
+```sh
+# List available Android devices/emulators
+adb devices
+
+# Start Android emulator (replace with your AVD name)
+emulator -avd Pixel_3a_API_30
+
+# Clean Android build
+cd android && ./gradlew clean && cd ..
+
+# Generate debug APK
+cd android && ./gradlew assembleDebug && cd ..
+```
+
+## Debugging Commands
+
+```sh
+# Open React Native debugger menu
+# iOS: Cmd + D (in simulator)
+# Android: Cmd + M or shake device
+
+# Enable network inspector
+npx react-native log-ios     # iOS logs
+npx react-native log-android # Android logs
+
+# Reset React Native cache completely
+npx react-native start --reset-cache
+rm -rf node_modules && npm install
+```
+
+## Package Management
+
+```sh
+# Install new package
+npm install <package-name>
+
+# Install React Native specific packages
+npm install <package-name>
+npx react-native link <package-name>  # For older RN versions
+
+# Update packages
+npm update
+
+# Check for outdated packages
+npm outdated
+```
+
+## Troubleshooting Commands
+
+```sh
+# Complete project reset (nuclear option)
+rm -rf node_modules package-lock.json
+npm install
+cd ios && pod install && cd ..
+npx react-native start --reset-cache
+
+# Reset Metro bundler
+npx react-native start --reset-cache
+
+# Fix iOS build issues
+cd ios && pod deintegrate && pod install && cd ..
+
+# Fix Android build issues
+cd android && ./gradlew clean && cd ..
+rm -rf android/.gradle
+```
+
 ### Now what?
 
 - If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
