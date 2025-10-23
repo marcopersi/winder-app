@@ -1,0 +1,19 @@
+# Default owners for everything in the repo
+* @marcopersi
+
+# CI/CD workflows
+/.github/ @marcopersi
+
+# iOS native code
+/ios/ @marcopersi
+
+# Android native code
+/android/ @marcopersi
+
+# React Native source
+/src/ @marcopersi
+
+# Configuration files
+*.config.js @marcopersi
+tsconfig.json @marcopersi
+package.json @marcopersi

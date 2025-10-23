@@ -1,3 +1,9 @@
+# WinderApp
+
+[![CI/CD Pipeline](https://github.com/marcopersi/winder-app/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/marcopersi/winder-app/actions/workflows/ci-cd.yml)
+[![codecov](https://codecov.io/gh/marcopersi/winder-app/branch/main/graph/badge.svg)](https://codecov.io/gh/marcopersi/winder-app)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=marcopersi_winder-app&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=marcopersi_winder-app)
+
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
 # Getting Started
