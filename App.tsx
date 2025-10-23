@@ -99,8 +99,6 @@ function App(): React.JSX.Element {
       } catch (error) {
         console.error('Error fetching wines:', error);
         console.log('Using sample wine data as fallback');
-        // Fallback zu Sample-Daten wenn Supabase nicht verfügbar
-        setSampleWines();
       } finally {
         setLoading(false);
       }
@@ -109,94 +107,6 @@ function App(): React.JSX.Element {
     // Always fetch wines, regardless of authentication status
     fetchWines();
   }, [user]);
-
-  // Sample wine data with images for fallback/testing
-  const setSampleWines = () => {
-    const sampleWines: Wine[] = [
-      {
-        id: '1',
-        name: 'Château Margaux 2015',
-        vintage: 2015,
-        price: 450.00,
-        region: 'Bordeaux, France',
-        grape_variety: 'Cabernet Sauvignon, Merlot',
-        description: 'Ein außergewöhnlicher Bordeaux mit komplexen Aromen von schwarzen Johannisbeeren, Zedernholz und feinen Gewürzen.',
-        image_url: 'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=400&h=600&fit=crop',
-        wine_tags: ['Premium', 'Sammlerwein', 'Lagerfähig'],
-        wine_type: 'red',
-        body: 'full',
-        sweetness: 'dry',
-        acidity: 'medium-plus',
-        tannin: 'high',
-        alcohol_content: 13.5,
-      },
-      {
-        id: '2',
-        name: 'Dom Pérignon 2012',
-        vintage: 2012,
-        price: 180.00,
-        region: 'Champagne, France',
-        grape_variety: 'Chardonnay, Pinot Noir',
-        description: 'Eleganter Champagner mit feinen Perlen und Noten von Brioche, Zitrusfrüchten und Mineralien.',
-        image_url: 'https://images.unsplash.com/photo-1547595628-c61a29f496f0?w=400&h=600&fit=crop',
-        wine_tags: ['Prestige', 'Feier', 'Elegant'],
-        wine_type: 'sparkling',
-        body: 'medium',
-        sweetness: 'dry',
-        acidity: 'high',
-        alcohol_content: 12.5,
-      },
-      {
-        id: '3',
-        name: 'Domaine de la Côte Chardonnay',
-        vintage: 2020,
-        price: 65.00,
-        region: 'Santa Barbara, California',
-        grape_variety: 'Chardonnay',
-        description: 'Frischer kalifornischer Chardonnay mit Aromen von grünem Apfel, Zitrone und subtilen Eichennoten.',
-        image_url: 'https://images.unsplash.com/photo-1551634072-8aea94d6f08d?w=400&h=600&fit=crop',
-        wine_tags: ['Frisch', 'Mineralisch', 'Eichennoten'],
-        wine_type: 'white',
-        body: 'medium',
-        sweetness: 'dry',
-        acidity: 'medium-plus',
-        alcohol_content: 13.0,
-      },
-      {
-        id: '4',
-        name: 'Whispering Angel Rosé',
-        vintage: 2022,
-        price: 28.00,
-        region: 'Provence, France',
-        grape_variety: 'Grenache, Cinsault',
-        description: 'Klassischer Provence Rosé mit zarten Aromen von roten Beeren, Pfirsich und mediterranen Kräutern.',
-        image_url: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=600&fit=crop',
-        wine_tags: ['Sommer', 'Leicht', 'Provence'],
-        wine_type: 'rosé',
-        body: 'light',
-        sweetness: 'dry',
-        acidity: 'medium',
-        alcohol_content: 12.5,
-      },
-      {
-        id: '5',
-        name: 'Quinta do Noval Vintage Port',
-        vintage: 2017,
-        price: 85.00,
-        region: 'Douro, Portugal',
-        grape_variety: 'Touriga Nacional, Tinta Roriz',
-        description: 'Kraftvoller Vintage Port mit reichen Aromen von dunklen Früchten, Schokolade und Gewürzen.',
-        image_url: 'https://images.unsplash.com/photo-1566753323558-f4e0952af115?w=400&h=600&fit=crop',
-        wine_tags: ['Dessert', 'Kraftvoll', 'Vintage'],
-        wine_type: 'dessert',
-        body: 'full',
-        sweetness: 'sweet',
-        acidity: 'medium',
-        alcohol_content: 20.0,
-      }
-    ];
-    setWines(sampleWines);
-  };
 
   const handleMatch = async (wine: Wine) => {
     console.log('Wine liked:', wine.name);

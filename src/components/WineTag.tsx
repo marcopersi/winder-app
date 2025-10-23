@@ -94,7 +94,7 @@ export const WineTag: React.FC<WineTagProps> = ({ tag }) => {
 
   const formatTagType = (type: string): string => {
     // Convert camelCase to readable format
-    const readable = type.replace(/([A-Z])/g, ' $1').toLowerCase();
+    const readable = type.replaceAll(/([A-Z])/g, ' $1').toLowerCase();
     return readable.charAt(0).toUpperCase() + readable.slice(1);
   };
 

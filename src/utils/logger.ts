@@ -104,16 +104,16 @@ export const logger = {
 export const LoggerConfig = {
   /** Enable debug mode for all modules */
   enableDebug: () => {
-    Object.values(MODULE_CONFIG).forEach(config => {
+    for (const config of Object.values(MODULE_CONFIG)) {
       config.level = 'debug';
-    });
+    }
   },
   
   /** Set production mode (info and above only) */
   setProduction: () => {
-    Object.values(MODULE_CONFIG).forEach(config => {
+    for (const config of Object.values(MODULE_CONFIG)) {
       config.level = 'info';
-    });
+    }
   },
   
   /** Disable specific module */

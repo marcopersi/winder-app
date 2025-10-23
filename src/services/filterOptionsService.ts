@@ -229,7 +229,7 @@ export const fetchWineTypeOptions = async (languageCode: string = 'de'): Promise
   }
 
   // Return translated names (e.g., 'Stillwein', 'Schaumwein' for DE) - Backend will convert!
-  const uniqueValues = [...new Set(wineTypes.map(wt => wt.translated_name).filter(value => value))];
+  const uniqueValues = [...new Set(wineTypes.map(wt => wt.translated_name).filter(Boolean))];
   
   if (uniqueValues.length === 0) {
     throw new Error(`No wine type options found for language ${normalizedLanguage}`);

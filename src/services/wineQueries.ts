@@ -10,7 +10,6 @@
  */
 
 import { supabase } from '../lib/supabase';
-import { WineFilter } from '../types';
 import { referenceDataService } from './referenceDataService';
 
 const SUPPORTED_LANGUAGES = ['de', 'en', 'fr', 'it'] as const;

@@ -41,7 +41,7 @@ export const WineCard: React.FC<WineCardProps> = ({ wine, onSwipe }) => {
   const wineTags = wine.tags && wine.tags.length > 0 ? wine.tags.slice(0, 6) : [];
 
   const formatVintage = (vintage: number | null | undefined) => {
-    if (vintage === null || vintage === undefined || isNaN(vintage) || vintage <= 0) {
+    if (vintage === null || vintage === undefined || Number.isNaN(vintage) || vintage <= 0) {
       return 'N.V.';
     }
     return vintage.toString();

@@ -17,13 +17,13 @@ const PriceRangeFilter: React.FC<PriceRangeFilterProps> = ({
 
   const handleMinPriceChange = (text: string) => {
     setLocalMinPrice(text);
-    const numValue = parseFloat(text) || 0;
+    const numValue = Number.parseFloat(text) || 0;
     onPriceChange(numValue, maxPrice);
   };
 
   const handleMaxPriceChange = (text: string) => {
     setLocalMaxPrice(text);
-    const numValue = parseFloat(text) || 1000;
+    const numValue = Number.parseFloat(text) || 1000;
     onPriceChange(minPrice, numValue);
   };
 
