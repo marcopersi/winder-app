@@ -94,7 +94,7 @@ jobs:
             --suppression suppression.xml
 
       - name: Upload OWASP results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: dependency-check-report
@@ -205,7 +205,7 @@ jobs:
         continue-on-error: true
 
       - name: Upload APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: android-debug-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
