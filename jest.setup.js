@@ -1,5 +1,4 @@
 // Jest setup file
-import 'react-native-gesture-handler/jestSetup';
 
 // Mock react-native-url-polyfill
 jest.mock('react-native-url-polyfill/auto', () => {});

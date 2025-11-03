@@ -66,18 +66,8 @@ export const WineCard: React.FC<WineCardProps> = ({ wine, onSwipe }) => {
       }
     }
     
-    // If no image found, provide sample wine images for testing
-    const sampleWineImages = [
-      'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=400&h=600&fit=crop',
-      'https://images.unsplash.com/photo-1547595628-c61a29f496f0?w=400&h=600&fit=crop',
-      'https://images.unsplash.com/photo-1551634072-8aea94d6f08d?w=400&h=600&fit=crop',
-      'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=600&fit=crop',
-      'https://images.unsplash.com/photo-1566753323558-f4e0952af115?w=400&h=600&fit=crop'
-    ];
-    
-    // Use wine ID to select consistent image
-    const imageIndex = parseInt(wine.id.slice(-1)) % sampleWineImages.length;
-    return sampleWineImages[imageIndex] || sampleWineImages[0];
+    // Use the same placeholder image as the web application
+    return 'https://www.exklusive-weine.ch/wp-content/uploads/2025/04/application-image-original.png';
   };
 
   const imageUrl = getWineImageUrl(wine);
@@ -93,7 +83,7 @@ export const WineCard: React.FC<WineCardProps> = ({ wine, onSwipe }) => {
           {/* Wine Image */}
           <View style={styles.imageContainer}>
             <Image 
-              source={{ uri: imageUrl || 'https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=400&h=600&fit=crop' }} 
+              source={{ uri: imageUrl || 'https://www.exklusive-weine.ch/wp-content/uploads/2025/04/application-image-original.png' }} 
               style={styles.image}
               resizeMode="cover"
             />

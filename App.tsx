@@ -4,6 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { SwipeContainer } from './src/components/SwipeContainer';
 import Header from './src/components/Header';
 import FilterMenu from './src/components/FilterMenu';
+import { AuthScreen } from './src/components/AuthScreen';
 import { Wine, WineFilter } from './src/types';
 import { userPreferenceService } from './src/services/userPreferenceService';
 import { useSupabaseAuth } from './src/hooks/useSupabaseAuth';
@@ -18,6 +19,7 @@ function App(): React.JSX.Element {
   const [loading, setLoading] = useState(true);
   const [currentFilter, setCurrentFilter] = useState<WineFilter>(initialFilter);
   const [isFilterVisible, setIsFilterVisible] = useState(false);
+  const [showAuthScreen, setShowAuthScreen] = useState(false);
   const { user, loading: authLoading, signOut } = useSupabaseAuth();
 
   // Fetch wines with filters applied - works with or without user login
@@ -43,8 +45,8 @@ function App(): React.JSX.Element {
       }
     } catch (error) {
       console.error('Error fetching filtered wines:', error);
-      console.log('Using sample wine data as fallback');
-      setSampleWines();
+      // No sample wines available, just set empty
+      setWines([]);
     } finally {
       setLoading(false);
     }
@@ -65,6 +67,7 @@ function App(): React.JSX.Element {
     if (currentFilter.grape?.length > 0) count++;
     if (currentFilter.country?.length > 0) count++;
     if (currentFilter.region?.length > 0) count++;
+    if (currentFilter.producer?.length > 0) count++;
     if (currentFilter.wineType?.length > 0) count++;
     if (currentFilter.color?.length > 0) count++;
     if (currentFilter.productionType?.length > 0) count++;
@@ -155,6 +158,20 @@ function App(): React.JSX.Element {
     );
   }
 
+  // Show auth screen when user requests login
+  if (showAuthScreen) {
+    return (
+      <SafeAreaProvider>
+        <AuthScreen 
+          onAuthSuccess={() => {
+            console.log('Auth successful, returning to main app');
+            setShowAuthScreen(false);
+          }}
+        />
+      </SafeAreaProvider>
+    );
+  }
+
   // Main app - works for both logged-in users and guests
   // Guest users can swipe wines but cannot save preferences
   return (
@@ -172,8 +189,7 @@ function App(): React.JSX.Element {
         }}
         onLogin={() => {
           console.log('Login requested - showing AuthScreen');
-          // Navigate to auth screen by triggering state change
-          // For now just log - full implementation would show AuthScreen modal or navigate
+          setShowAuthScreen(true);
         }}
         filterCount={getActiveFilterCount()}
         isAuthenticated={!!user}

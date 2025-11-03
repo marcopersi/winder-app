@@ -11,6 +11,7 @@
 
 import { supabase } from '../lib/supabase';
 import { referenceDataService } from './referenceDataService';
+import type { Wine, DatabaseWineFilter } from '../types';
 
 const SUPPORTED_LANGUAGES = ['de', 'en', 'fr', 'it'] as const;
 type SupportedLanguage = (typeof SUPPORTED_LANGUAGES)[number];
@@ -96,7 +97,7 @@ export const fetchWines = async (
       // Wine type filter - Convert translated names to canonical names
       if (filters.wineType && filters.wineType.length > 0) {
         const wineTypeNames = filters.wineType
-          .map(name => referenceDataService.getWineTypeName(name))
+          .map((name: string) => referenceDataService.getWineTypeName(name))
           .filter((n): n is string => n !== null);
         
         if (wineTypeNames.length > 0) {
@@ -107,7 +108,7 @@ export const fetchWines = async (
       // Wine color filter - Convert translated names to canonical names
       if (filters.color && filters.color.length > 0) {
         const colorNames = filters.color
-          .map(name => referenceDataService.getWineColorName(name))
+          .map((name: string) => referenceDataService.getWineColorName(name))
           .filter((n): n is string => n !== null);
         
         if (colorNames.length > 0) {
@@ -138,15 +139,21 @@ export const fetchWines = async (
       // Unit filter
       if (filters.unit && filters.unit.length > 0) {
         const regex = /^(\d+\.?\d*)/;
-        const unitVolumes = filters.unit.map(u => {
+        const unitVolumes = filters.unit.map((u: string) => {
           // Convert "0.75L" to 0.75
           const match = regex.exec(u);
           return match ? parseFloat(match[1]) : null;
-        }).filter(v => v !== null);
+        }).filter((v: number | null) => v !== null);
         
         if (unitVolumes.length > 0) {
           winesQuery = winesQuery.in('unit_volume', unitVolumes);
         }
+      }
+
+      // Producer filter
+      if (filters.producer && filters.producer.length > 0) {
+        console.log('[fetchWines] Applying producer filter:', filters.producer);
+        winesQuery = winesQuery.in('producer_id', filters.producer);
       }
 
       // Grape filter - requires separate query
@@ -315,13 +322,20 @@ const loadGrapesForWines = async (wineIds: string[]): Promise<Record<string, str
   }
 
   try {
+    // Match the web app's exact query structure
     const { data, error } = await supabase
       .from('wine_grapes')
-      .select('wine_id, grapes!inner(name)')
+      .select('id, wine_id, grape_id, percentage, created_at, grapes ( id, name )')
       .in('wine_id', wineIds);
 
     if (error) {
-      console.error('[loadGrapesForWines] Error:', error);
+      console.error('[loadGrapesForWines] Supabase error:', JSON.stringify(error));
+      // Return empty map instead of crashing the app - grapes are optional
+      return {};
+    }
+
+    if (!data || data.length === 0) {
+      console.log('[loadGrapesForWines] No grape data found for wines (this is OK)');
       return {};
     }
 
@@ -336,15 +350,18 @@ const loadGrapesForWines = async (wineIds: string[]): Promise<Record<string, str
         grapesMap[row.wine_id] = [];
       }
       
+      // Avoid duplicates
       if (!grapesMap[row.wine_id].includes(row.grapes.name)) {
         grapesMap[row.wine_id].push(row.grapes.name);
       }
     });
 
+    console.log(`[loadGrapesForWines] Loaded grapes for ${Object.keys(grapesMap).length} wines`);
     return grapesMap;
 
   } catch (error) {
-    console.error('[loadGrapesForWines] Error:', error);
+    console.error('[loadGrapesForWines] Catch error:', error);
+    // Return empty map to prevent app crash - grapes are optional metadata
     return {};
   }
 };

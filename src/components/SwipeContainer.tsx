@@ -85,6 +85,7 @@ export const SwipeContainer: React.FC<SwipeContainerProps> = ({
     grape: [],
     country: [],
     region: [],
+    producer: [],
     wineType: [],
     color: [],
     sweetness: [],

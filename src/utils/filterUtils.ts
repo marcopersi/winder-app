@@ -55,6 +55,12 @@ export const convertToDBFilter = async (frontendFilter: WineFilter): Promise<Dat
     dbFilter.grape = grapes;
   }
 
+  // Producer filters
+  const producers = sanitizeStringList(frontendFilter.producer || []);
+  if (producers.length > 0) {
+    dbFilter.producer = producers;
+  }
+
   // Wine type filters
   const wineTypes = sanitizeStringList(frontendFilter.wineType || []);
   if (wineTypes.length > 0) {
@@ -108,6 +114,7 @@ export const createDefaultFilter = (): WineFilter => ({
   grape: [],
   country: [],
   region: [],
+  producer: [],
   wineType: [],
   color: [],
   sweetness: [],

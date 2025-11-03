@@ -504,6 +504,43 @@ export const fetchPriceOptions = async (languageCode: string = 'de'): Promise<st
 };
 
 /**
+ * Fetch producer options (names and IDs)
+ * Returns producers that have at least one wine associated
+ */
+export const fetchProducerOptions = async (): Promise<Array<{ id: string; name: string }>> => {
+  const cacheKey = 'producers';
+  
+  const cached = getCacheValue(cacheKey);
+  if (cached) return cached;
+
+  logger.filterOptions.debug('Fetching producer options...');
+
+  try {
+    const { data: producers, error } = await supabase
+      .from('producers')
+      .select('id, name')
+      .order('name', { ascending: true });
+
+    if (error) {
+      logger.filterOptions.error('Error fetching producer options:', error);
+      throw error;
+    }
+
+    if (!producers || producers.length === 0) {
+      logger.filterOptions.warn('No producer options found in database');
+      return [];
+    }
+
+    setCacheValue(cacheKey, producers);
+    logger.filterOptions.info(`Loaded ${producers.length} producer options`);
+    return producers;
+  } catch (error) {
+    logger.filterOptions.error('Error fetching producer options:', error);
+    throw error;
+  }
+};
+
+/**
  * Get all filter options for a specific language
  * Matches Web App's getFilterOptions exactly
  * NO FALLBACKS - throws immediately on any error

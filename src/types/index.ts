@@ -62,6 +62,7 @@ export interface WineFilter {
   grape: string[];
   country: string[];
   region: string[];
+  producer: string[];  // Producer filter (producer IDs)
   wineType: string[];
   color: string[];
   sweetness: string[];  // Sweetness level filter
@@ -91,6 +92,7 @@ export interface DatabaseWineFilter {
   countries?: string[];           // Filter by country_code
   regions?: string[];            // Filter by region names
   grape?: string[];              // Filter by grape varieties (wine_grapes table)
+  producer?: string[];           // Filter by producer_id (producers table)
   wineType?: string[];           // Filter by wine_type_id (wine_types table)
   color?: string[];              // Filter by wine_color_id (wine_colors table)
   sweetness?: string[];          // Filter by sweetness_level_id (sweetness_levels table)

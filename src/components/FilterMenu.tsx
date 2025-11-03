@@ -22,6 +22,7 @@ import CountryFilter from './filters/CountryFilter';
 import WineTypeFilter from './filters/WineTypeFilter';
 import CharacteristicFilter from './filters/CharacteristicFilter';
 import CollapsibleCard from './filters/CollapsibleCard';
+import ProducerFilter from './filters/ProducerFilter';
 
 interface FilterMenuProps {
   isVisible: boolean;
@@ -176,6 +177,16 @@ const FilterMenu: React.FC<FilterMenuProps> = ({
               selectedOptions={filter.country || []}
               onToggleOption={(value) => handleToggleOption('country', value)}
               labelMap={countryLabels}
+            />
+          </CollapsibleCard>
+          
+          {/* Producer Filter */}
+          <CollapsibleCard title={`Produzenten (${(filter.producer || []).length})`} defaultExpanded={false}>
+            <ProducerFilter
+              selectedProducerIds={filter.producer || []}
+              onProducersChange={(producerIds) => {
+                setFilter(prev => ({ ...prev, producer: producerIds }));
+              }}
             />
           </CollapsibleCard>
           
