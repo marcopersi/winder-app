@@ -235,6 +235,7 @@ src/
 - Features that aren't currently needed (YAGNI)
 - Complex solutions when simple ones work (KISS)
 - Nested VirtualizedList/FlatList inside ScrollView
+- You never commit without asking, never!
 
 ✅ **Always do this:**
 - Extract shared code
